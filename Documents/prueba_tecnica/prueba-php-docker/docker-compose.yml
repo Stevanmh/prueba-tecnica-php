@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Servicio del Backend (PHP + Apache)
+  backend:
+    build: .
+    container_name: php_api_backend
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend:/var/www/html
+    depends_on:
+      - db
+
+  # Servicio de la Base de Datos (MySQL)
+  db:
+    image: mysql:8.0
+    ports: 
+      - "3306:3306" 
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'products_db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'rootpassword'
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
